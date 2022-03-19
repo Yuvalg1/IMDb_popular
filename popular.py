@@ -6,6 +6,9 @@ try:
     source.raise_for_status() # throw an exception if address is invalid
 
     soup = BeautifulSoup(source.text, 'html.parser')
-    print(soup)
+    
+    movies = soup.find('tbody', class_='lister-list').find_all('tr')
+
+    print(len(movies))
 except Exception as e:
     print(e)
