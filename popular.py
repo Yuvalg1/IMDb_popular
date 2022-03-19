@@ -14,7 +14,8 @@ try:
 
         rank = movie.find('td', class_ = 'titleColumn').get_text(strip = True).split(')')[1].split('(')[0].strip('\n')
         
-        print(rank, '\t', name)
+        year = movie.find('td', class_ = 'titleColumn').span.text.strip('(').strip(')')
+        print(rank, '\t', name, year)
         
 except Exception as e:
     print(e)
