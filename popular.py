@@ -2,6 +2,8 @@ from email.policy import default
 from bs4 import BeautifulSoup
 import requests
 
+mov_lst = []
+
 try:
     source = requests.get('https://www.imdb.com/chart/moviemeter/?ref_=nv_mv_mpm') # get most popular movies site
     source.raise_for_status() # throw an exception if address is invalid
@@ -32,6 +34,11 @@ try:
             else:
                 sign = -1
         print(f"{rank}. \t{name} ({year}) {int(sign) * int(change)}")
+        mov_lst.append({"rank": rank, "name": name, "year": year, "sign": sign, "change": change})
         
 except Exception as e:
     print(e)
+
+#print("welcome to Pick a Movie Generator!")
+#print("The top 100 movies are here to get picked!")
+#ans = input("If that's too much, would you like to shorten the range?").casefold()
