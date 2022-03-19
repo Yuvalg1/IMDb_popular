@@ -1,6 +1,7 @@
 from email.policy import default
 from bs4 import BeautifulSoup
 import requests
+import numpy as np
 
 mov_lst = []
 
@@ -21,6 +22,13 @@ try:
         
         year = html_movie.span.text.strip('(').strip(')')
 
+        rating = movie.find('td', class_ = 'ratingColumn imdbRating').strong
+
+        if rating == None:
+            rating = 0.0
+        else:
+            rating = float(rating.text)
+
         change = html_movie.find('div', class_ = 'velocity').text.split('\n(')[1].strip('\n').strip(')').replace(",", "")
         if change == 'no change':
             change = 0
@@ -33,10 +41,12 @@ try:
                 sign = 1
             else:
                 sign = -1
-        mov_lst.append({"rank": rank, "name": name, "year": year, "sign": sign, "change": change})
+                
+        mov_lst.append({"rank": rank, "name": name, "year": year, "sign": sign, "change": change, "rating": rating})
         
 except Exception as e:
     print(e)
+
 
 suggested = mov_lst
 
@@ -59,3 +69,13 @@ if ans == 'y':
     a = max(min(int(input()), maxYear), minYear)
     b = max(min(int(input()), maxYear), minYear)
     suggested = [x for x in suggested if int(x['year']) in range(int(a), int(b))]
+
+ans = input('would you like to pick the range of rating? y/n ')
+if ans == 'y':
+    seq = [x['rating'] for x in suggested]
+    minRating = int(min(seq))
+    maxRating = int(max(seq))
+    print(f'pick a range between [{minRating}, {maxRating}]: ')
+    a = max(min(int(input()), maxRating), minRating)
+    b = max(min(int(input()), maxRating), minRating)
+    suggested = [x for x in suggested if float(x['rating']) in np.arange(int(a), int(b), 0.1)]
