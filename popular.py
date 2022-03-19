@@ -5,6 +5,9 @@ import numpy as np
 
 mov_lst = []
 
+def print_dict(x):
+    print("{0}. \t{1} ({2}) Change: {3} Rating: {4}".format(x["rank"], x["name"], x["year"], int(x["sign"]) * int(x["change"]), x["rating"]))
+
 try:
     source = requests.get('https://www.imdb.com/chart/moviemeter/?ref_=nv_mv_mpm') # get most popular movies site
     source.raise_for_status() # throw an exception if address is invalid
@@ -41,9 +44,7 @@ try:
                 sign = 1
             else:
                 sign = -1
-                
         mov_lst.append({"rank": rank, "name": name, "year": year, "sign": sign, "change": change, "rating": rating})
-        
 except Exception as e:
     print(e)
 
@@ -68,14 +69,13 @@ if ans == 'y':
     print(f'pick a range between [{minYear}, {maxYear}]: ')
     a = max(min(int(input()), maxYear), minYear)
     b = max(min(int(input()), maxYear), minYear)
-    suggested = [x for x in suggested if int(x['year']) in range(int(a), int(b))]
+    suggested = [x for x in suggested if a < int(x['year']) < b]
 
 ans = input('would you like to pick the range of rating? y/n ')
 if ans == 'y':
-    seq = [x['rating'] for x in suggested]
-    minRating = int(min(seq))
-    maxRating = int(max(seq))
-    print(f'pick a range between [{minRating}, {maxRating}]: ')
-    a = max(min(int(input()), maxRating), minRating)
-    b = max(min(int(input()), maxRating), minRating)
-    suggested = [x for x in suggested if float(x['rating']) in np.arange(int(a), int(b), 0.1)]
+    print(f'pick a range between [0, 10]: ')
+    a = float(max(min(float(input()), 10), 0))
+    b = float(max(min(float(input()) + 0.1, 10), 0))
+    suggested = [x for x in suggested if a < float(x['rating']) < b]
+
+[print_dict(x) for x in suggested]
