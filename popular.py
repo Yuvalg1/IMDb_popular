@@ -9,6 +9,12 @@ try:
     
     movies = soup.find('tbody', class_='lister-list').find_all('tr')
 
-    print(len(movies))
+    for movie in movies:
+        name = movie.find('td', class_ = 'titleColumn').a.text
+
+        rank = movie.find('td', class_ = 'titleColumn').get_text(strip = True).split(')')[1].split('(')[0].strip('\n')
+        
+        print(rank, '\t', name)
+        
 except Exception as e:
     print(e)
