@@ -33,12 +33,29 @@ try:
                 sign = 1
             else:
                 sign = -1
-        print(f"{rank}. \t{name} ({year}) {int(sign) * int(change)}")
         mov_lst.append({"rank": rank, "name": name, "year": year, "sign": sign, "change": change})
         
 except Exception as e:
     print(e)
 
-#print("welcome to Pick a Movie Generator!")
-#print("The top 100 movies are here to get picked!")
-#ans = input("If that's too much, would you like to shorten the range?").casefold()
+suggested = mov_lst
+
+print("welcome to Pick a Movie Generator!")
+print("The top 100 movies are here to get picked!")
+
+ans = input("If that's too much, would you like to shorten the range? y/n ").casefold()
+if ans == 'y':
+    print('pick a range between [1, 100]: ')
+    a = max(min(int(input()) - 1, 100), 0)
+    b = max(min(int(input()), 100), 0)
+    suggested = suggested[a : b]
+
+ans = input('would you like to pick the range of the release year? y/n ')
+if ans == 'y':
+    seq = [x['year'] for x in suggested]
+    minYear = int(min(seq))
+    maxYear = int(max(seq))
+    print(f'pick a range between [{minYear}, {maxYear}]: ')
+    a = max(min(int(input()), maxYear), minYear)
+    b = max(min(int(input()), maxYear), minYear)
+    suggested = [x for x in suggested if int(x['year']) in range(int(a), int(b))]
