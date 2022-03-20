@@ -1,7 +1,7 @@
 from email.policy import default
 from bs4 import BeautifulSoup
 import requests
-import numpy as np
+import random
 
 mov_lst = []
 
@@ -61,7 +61,7 @@ if ans == 'y':
     b = max(min(int(input()), 100), 0)
     suggested = suggested[a : b]
 
-ans = input('would you like to pick the range of the release year? y/n ')
+ans = input('would you like to pick the range of the release year? y/n ').casefold()
 if ans == 'y':
     seq = [x['year'] for x in suggested]
     minYear = int(min(seq))
@@ -71,11 +71,15 @@ if ans == 'y':
     b = max(min(int(input()), maxYear), minYear)
     suggested = [x for x in suggested if a < int(x['year']) < b]
 
-ans = input('would you like to pick the range of rating? y/n ')
+ans = input('would you like to pick the range of rating? y/n ').casefold()
 if ans == 'y':
     print(f'pick a range between [0, 10]: ')
     a = float(max(min(float(input()), 10), 0))
     b = float(max(min(float(input()) + 0.1, 10), 0))
     suggested = [x for x in suggested if a < float(x['rating']) < b]
 
-[print_dict(x) for x in suggested]
+ans = input("Would you like a personal suggestion? y/n ").casefold()
+if ans == 'y':
+    print_dict(suggested[random.randint(0, len(suggested))])
+else:
+    [print_dict(x) for x in suggested]
